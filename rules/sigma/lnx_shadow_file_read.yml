@@ -1,0 +1,27 @@
+title: Linux password hash file read with a general-purpose tool
+id: 6a2e7c85-9f3d-4b50-8e14-2c7b5f9a3e09
+status: experimental
+description: Reading /etc/shadow exposes password hashes that can be cracked offline.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.credential-access
+    - attack.t1003.008
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_tool:
+        Image|endswith:
+            - '/cat'
+            - '/less'
+            - '/more'
+            - '/head'
+            - '/tail'
+            - '/cp'
+    selection_file:
+        CommandLine|contains: '/etc/shadow'
+    condition: all of selection_*
+falsepositives:
+    - Administrators auditing accounts
+level: high

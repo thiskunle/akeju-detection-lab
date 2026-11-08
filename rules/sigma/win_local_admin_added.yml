@@ -1,0 +1,26 @@
+title: Account added to the local Administrators group
+id: 5e3b8c72-6d4a-4c91-9f27-7a1e3c5d8b05
+status: experimental
+description: Adding an account to local Administrators gives an attacker lasting control of the machine.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.persistence
+    - attack.t1098
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_image:
+        Image|endswith:
+            - '\net.exe'
+            - '\net1.exe'
+    selection_args:
+        CommandLine|contains|all:
+            - 'localgroup'
+            - 'administrators'
+            - '/add'
+    condition: all of selection_*
+falsepositives:
+    - Help desk or provisioning scripts
+level: high

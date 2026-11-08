@@ -1,0 +1,23 @@
+title: Linux account created with root's user ID
+id: c4f18b27-6e5a-4d93-a2c7-8d3e6b1f4a10
+status: experimental
+description: A second account with UID 0 is a hidden root login.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.persistence
+    - attack.t1136.001
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_tool:
+        Image|endswith: '/useradd'
+    selection_uid:
+        CommandLine|contains:
+            - ' -u 0 '
+            - ' --uid 0 '
+    condition: all of selection_*
+falsepositives:
+    - None expected
+level: critical

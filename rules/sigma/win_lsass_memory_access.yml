@@ -1,0 +1,28 @@
+title: Suspicious process opened LSASS memory
+id: 8f4c2a67-1d9b-4f75-a3e8-6b2d9c4e7f07
+status: experimental
+description: Reading LSASS memory is how tools like Mimikatz steal Windows credentials.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+logsource:
+    category: process_access
+    product: windows
+detection:
+    selection_target:
+        TargetImage|endswith: '\lsass.exe'
+    selection_access:
+        GrantedAccess|contains:
+            - '0x1010'
+            - '0x1410'
+            - '0x1fffff'
+    filter_system:
+        SourceImage|startswith:
+            - 'C:\Windows\System32\'
+            - 'C:\Program Files\'
+    condition: selection_target and selection_access and not filter_system
+falsepositives:
+    - Security products installed outside the filtered folders
+level: critical

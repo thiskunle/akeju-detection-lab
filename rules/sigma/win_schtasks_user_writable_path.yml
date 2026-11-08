@@ -1,0 +1,26 @@
+title: Scheduled task created to run from a user-writable folder
+id: 2f9a7b36-5e1c-4a48-b3d6-8c4f1e7a9d03
+status: experimental
+description: Persistence often uses a scheduled task pointing at a program in Temp, AppData or Public.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.persistence
+    - attack.t1053.005
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_image:
+        Image|endswith: '\schtasks.exe'
+    selection_create:
+        CommandLine|contains: ' /create '
+    selection_path:
+        CommandLine|contains:
+            - '\AppData\'
+            - '\Temp\'
+            - '\Users\Public\'
+    condition: all of selection_*
+falsepositives:
+    - Per-user software updaters
+level: medium

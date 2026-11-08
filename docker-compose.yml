@@ -1,0 +1,9 @@
+# Copyright (c) 2026 Adekunle Akeju. All rights reserved except as licensed.
+# Akeju Detection Lab, created by Adekunle Akeju. SPDX-License-Identifier: AGPL-3.0-or-later
+services:
+  manager:
+    image: wazuh/wazuh-manager:4.14.10
+    container_name: akeju-lab-manager
+    hostname: akeju-lab-manager
+    volumes:
+      - ./wazuh/local_rules.xml:/var/ossec/etc/rules/local_rules.xml

@@ -1,0 +1,26 @@
+title: PowerShell started with an encoded command
+id: 4b8f6a21-7c3e-4d19-9a52-1e0c7d2f3a01
+status: experimental
+description: Encoded commands hide what PowerShell is about to run and are common in attacker tooling.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_image:
+        Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+    selection_flag:
+        CommandLine|contains:
+            - ' -enc '
+            - ' -ec '
+            - ' -encodedcommand '
+    condition: selection_image and selection_flag
+falsepositives:
+    - Some software deployment and management tools
+level: high

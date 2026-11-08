@@ -1,0 +1,27 @@
+title: Downloaded script piped straight into a shell
+id: 3d6b9f41-4c8e-4a12-b7d5-9e1f4a6c2d08
+status: experimental
+description: Running a download without saving it first is a common way to deliver Linux payloads.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.execution
+    - attack.t1059.004
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_tool:
+        CommandLine|contains:
+            - 'curl '
+            - 'wget '
+    selection_pipe:
+        CommandLine|contains:
+            - '| sh'
+            - '|sh'
+            - '| bash'
+            - '|bash'
+    condition: all of selection_*
+falsepositives:
+    - Official install scripts run by administrators
+level: high

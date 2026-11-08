@@ -1,0 +1,4 @@
+pysigma>=2.0
+pysigma-backend-sqlite>=2.1
+pyyaml>=6
+pytest>=8

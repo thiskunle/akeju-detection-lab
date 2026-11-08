@@ -1,0 +1,27 @@
+title: Volume shadow copies deleted
+id: 9c1e4d58-2a7f-4b63-a8e9-5d3b7f2c6e04
+status: experimental
+description: Ransomware deletes shadow copies so victims cannot restore files.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.impact
+    - attack.t1490
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_vssadmin:
+        Image|endswith: '\vssadmin.exe'
+        CommandLine|contains|all:
+            - 'delete'
+            - 'shadows'
+    selection_wmic:
+        Image|endswith: '\wmic.exe'
+        CommandLine|contains|all:
+            - 'shadowcopy'
+            - 'delete'
+    condition: 1 of selection_*
+falsepositives:
+    - Rare administrator cleanup
+level: critical

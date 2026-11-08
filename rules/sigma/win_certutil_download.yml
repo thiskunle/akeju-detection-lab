@@ -1,0 +1,25 @@
+title: Certutil used to download a file
+id: 7d2c9e14-3b6a-4f80-8c17-2a9d6e4b5c02
+status: experimental
+description: Certutil is a built-in certificate tool that attackers misuse to fetch payloads.
+author: Adekunle Akeju
+date: 2026-11-08
+tags:
+    - attack.command-and-control
+    - attack.t1105
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_image:
+        Image|endswith: '\certutil.exe'
+    selection_flag:
+        CommandLine|contains:
+            - 'urlcache'
+            - 'verifyctl'
+    selection_url:
+        CommandLine|contains: 'http'
+    condition: all of selection_*
+falsepositives:
+    - Administrators testing certificate retrieval
+level: high

