@@ -5,7 +5,7 @@ description: Clearing event logs removes the evidence defenders depend on.
 author: Adekunle Akeju
 date: 2026-11-08
 tags:
-    - attack.t1070.001
+    - attack.t1685.005
 logsource:
     category: process_creation
     product: windows

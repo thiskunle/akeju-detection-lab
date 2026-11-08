@@ -25,7 +25,7 @@ Record the date, atomic test number and result here after each run. No run has b
 | T1053.005 | win_schtasks_user_writable_path | Not run | | |
 | T1490 | win_shadow_copy_delete | Not run | | |
 | T1098 | win_local_admin_added | Not run | | |
-| T1070.001 | win_event_log_cleared | Not run | | |
+| T1685.005 | win_event_log_cleared | Not run | | |
 | T1003.001 | win_lsass_memory_access | Not run | | |
 | T1059.004 | lnx_download_piped_to_shell | Not run | | |
 | T1003.008 | lnx_shadow_file_read | Not run | | |

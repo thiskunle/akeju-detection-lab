@@ -32,7 +32,7 @@ def wait_until_ready(limit=240):
 
 def fired(lines):
     result = docker(LOGTEST, stdin="\n".join(lines) + "\n")
-    return set(re.findall(r"id: '(\d+)'", result.stdout + result.stderr))
+    return set(re.findall(r"^\s*id: '(\d+)'", result.stdout + result.stderr, re.M))
 
 
 def main():

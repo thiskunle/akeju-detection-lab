@@ -20,7 +20,7 @@ Detection-as-code: threat detections mapped to MITRE ATT&CK, with automated test
 | T1053.005 | Scheduled task | Yes | |
 | T1490 | Inhibit system recovery | Yes | |
 | T1098 | Account manipulation | Yes | |
-| T1070.001 | Clear Windows event logs | Yes | |
+| T1685.005 | Clear Windows event logs | Yes | |
 | T1003.001 | LSASS memory | Yes | |
 | T1003.008 | /etc/shadow | Yes | Yes |
 | T1136.001 | Create local account | Yes | Yes |

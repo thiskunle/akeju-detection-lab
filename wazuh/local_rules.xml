@@ -1,14 +1,14 @@
 <!-- Custom Wazuh rules by Adekunle Akeju. Part of akeju-detection-lab. SPDX-License-Identifier: AGPL-3.0-or-later -->
 <group name="akeju,">
   <rule id="100100" level="12">
-    <if_sid>5402</if_sid>
+    <if_sid>5402,5403</if_sid>
     <match>/etc/shadow</match>
     <description>Akeju lab: sudo used to access the password hash file</description>
     <mitre><id>T1003.008</id></mitre>
   </rule>
 
   <rule id="100101" level="10">
-    <if_sid>5402</if_sid>
+    <if_sid>5402,5403</if_sid>
     <match>/etc/sudoers|visudo</match>
     <description>Akeju lab: sudo configuration accessed through sudo</description>
     <mitre><id>T1548.003</id></mitre>
@@ -22,7 +22,7 @@
   </rule>
 
   <rule id="100103" level="12">
-    <if_sid>5402</if_sid>
+    <if_sid>5402,5403</if_sid>
     <regex type="pcre2">(curl|wget)\s.*\|\s*(ba)?sh</regex>
     <description>Akeju lab: downloaded script piped into a shell with sudo</description>
     <mitre><id>T1059.004</id></mitre>
